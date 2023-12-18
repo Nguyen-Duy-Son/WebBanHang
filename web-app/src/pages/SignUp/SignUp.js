@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { FaUser, FaLock, FaEnvelope } from 'react-icons/fa';
 import background from '~/image/background.jpg';
 import imgcontent from '~/image/img-content.jpg';
@@ -8,7 +9,9 @@ import Snowfall from 'react-snowfall'; // Import thư viện react-snowfall
 import './SignUp.css';
 
 const SignUpForm = () => {
-    const [signIn,setSignIn] = useState("");
+    const [signIn, setSignIn] = useState('');
+    const [pass, setPass] = useState();
+    const navigate = useNavigate();
     const formikSignUp = useFormik({
         initialValues: {
             userName: '',
@@ -17,25 +20,39 @@ const SignUpForm = () => {
             confirmPassword: '',
         },
         onSubmit: async (values) => {
+            let errorPasswordMessage = '';
+
             // Kiểm tra sự khớp giữa trường Password và Confirm Password
             if (values.password !== values.confirmPassword) {
-                console.log('Passwords do not match');
+                errorPasswordMessage += 'Passwords do not match.\n';
+            }
+            if (values.password.length < 8) {
+                errorPasswordMessage +=
+                    'Password must contain at least 8 characters.\n';
+            }
+            if (
+                !values.password.match(/\d/) ||
+                !values.password.match(/[a-zA-Z]/)
+            ) {
+                errorPasswordMessage +=
+                    'Password must contain at least one letter and one number.\n';
+            }
+            if (errorPasswordMessage !== '') {
+                setPass(errorPasswordMessage);
                 return;
             }
-
-            console.log('Form submitted:', values);
             try {
                 const response = await axios.post(
                     'http://localhost:5000/api/v1/auth/register',
                     values,
                 );
-                setSignIn("Sign Up successfully");
+                alert('Sign Up Successfully!');
+                navigate('/SignIn');
                 console.log('API response:', response.data);
-                // Xử lý logic sau khi nhận được phản hồi từ API
             } catch (error) {
-                setSignIn("Sign Up failed");
+                setSignIn('Sign Up failed');
                 console.error('API error:', error);
-                // Xử lý lỗi khi gọi API
+                navigate('/SignUp');
             }
         },
     });
@@ -43,11 +60,11 @@ const SignUpForm = () => {
     return (
         <div
             className="flex justify-center items-center min-h-screen"
-            style={{
-                backgroundImage: `url(${background})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            }}
+            // style={{
+            //     backgroundImage: `url(${background})`,
+            //     backgroundSize: 'cover',
+            //     backgroundPosition: 'center',
+            // }}
         >
             <Snowfall
                 snowflakeCount={100} // Số lượng tuyết rơi
@@ -78,7 +95,7 @@ const SignUpForm = () => {
                     className={`bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 ${
                         formikSignUp.isSubmitting ? 'submitting' : ''
                     }`}
-                    style={{ background: 'transparent' , boxShadow:'none'}}
+                    style={{ background: 'transparent', boxShadow: 'none' }}
                     onSubmit={formikSignUp.handleSubmit}
                 >
                     <div className="mb-4">
@@ -116,6 +133,13 @@ const SignUpForm = () => {
                             onChange={formikSignUp.handleChange}
                             required
                         />
+                        {pass && (
+                            <ul className="text-red-500 text-xs pt-2">
+                                {pass.split('\n').map((error, index) => (
+                                    <li key={index}>{error}</li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
                     <div className="mb-4">
                         <label
@@ -157,15 +181,14 @@ const SignUpForm = () => {
                         <p>{signIn}</p>
                     </div>
                     <div className="flex items-center justify-between">
-                      <div className='signup-button flex justify-between'>
-                        <button
-                            className="bg-blue-500 text-center flex justify-between align-center hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            type="submit"
-                        >
-                            Sign Up
-                        </button>
-                      </div>
-                        
+                        <div className="signup-button flex justify-between">
+                            <button
+                                className="bg-blue-500 text-center flex justify-between align-center hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                type="submit"
+                            >
+                                Sign Up
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>

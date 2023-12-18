@@ -1,187 +1,135 @@
-
-// }
-// import React, { useState } from 'react';
-// import axios from 'axios';
-// import loginImg from '~/image/xay-dung-website-ban-hang.jpg';
-
-// export default function Login() {
-//   const [username, setUsername] = useState('');
-//   const [password, setPassword] = useState('');
-
-//   const handleSignIn = async () => {
-//     try {
-//       const response = await axios.post('', {
-//         username,
-//         password,
-//       });
-
-//       // Xử lý kết quả từ API tại đây (response.data)
-//       console.log('Đăng nhập thành công:', response.data);
-//     } catch (error) {
-//       // Xử lý lỗi tại đây (error.message)
-//       console.error('Đăng nhập thất bại:', error.message);
-//     }
-//   };
-
-//   return (
-//     <div className='flex h-screen bg-gray-100'>
-//       <div className='w-1/2 hidden sm:block'>
-//         <img
-//           className='w-full h-full object-contain object-center'
-//           src={loginImg}
-//           alt='Minion Login'
-//         />
-//       </div>
-//       <div className='w-full sm:w-1/2 bg-gray-100 flex flex-col justify-center'>
-//         <form className='max-w-md mx-auto bg-white p-8 shadow-md rounded'>
-//           <h2 className='text-4xl font-bold text-center mb-6'>BRAND.</h2>
-//           <div className='mb-4'>
-//             <label htmlFor='username' className='text-lg font-medium'>
-//               Username
-//             </label>
-//             <input
-//               id='username'
-//               className='w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500'
-//               type='text'
-//               value={username}
-//               onChange={(e) => setUsername(e.target.value)}
-//             />
-//           </div>
-//           <div className='mb-4'>
-//             <label htmlFor='password' className='text-lg font-medium'>
-//               Password
-//             </label>
-//             <input
-//               id='password'
-//               className='w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500'
-//               type='password'
-//               value={password}
-//               onChange={(e) => setPassword(e.target.value)}
-//             />
-//           </div>
-//           <button
-//             className='w-full bg-indigo-600 hover:bg-indigo-500 text-white py-2 rounded'
-//             onClick={handleSignIn}
-//           >
-//             Sign In
-//           </button>
-//           <div className='flex justify-between mt-4'>
-//             <label className='flex items-center'>
-//               <input className='mr-2' type='checkbox' /> Remember Me
-//             </label>
-//             <p>Create an account</p>
-//           </div>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// }
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import loginImg from '~/image/xay-dung-website-ban-hang.jpg';
-import 'animista';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isError, setIsError] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [showPassword, setShowPassword] = useState(false); 
+    const navigate = useNavigate();
 
-  const handleSignIn = async () => {
-    setIsSubmitting(true);
-
-    try {
-      const response = await axios.post('', {
-        username,
-        password,
-      });
-
-      // Xử lý kết quả từ API tại đây (response.data)
-      console.log('Đăng nhập thành công:', response.data);
-      setIsSubmitting(false);
-      setIsSuccess(true);
-    } catch (error) {
-      // Xử lý lỗi tại đây (error.message)
-      console.error('Đăng nhập thất bại:', error.message);
-      setIsSubmitting(false);
-      setIsError(true);
-    }
-  };
-
-  return (
-    <div className='flex h-screen bg-gray-100'>
-      <div className='w-1/2 hidden sm:block'>
-        <img
-          className='w-full h-full object-contain object-center'
-          src={loginImg}
-          alt='Login Imgage'
-        />
-      </div>
-      <div className='w-full sm:w-1/2 bg-gray-100 flex flex-col justify-center'>
-        <form className='max-w-md mx-auto bg-white p-8 shadow-md rounded'>
-          <h2 className='text-4xl font-bold text-center mb-6'>BRAND.</h2>
-          <div className='mb-4'>
-            <label htmlFor='username' className='text-lg font-medium'>
-              Username
-            </label>
-            <input
-              id='username'
-              className='w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              type='text'
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-          <div className='mb-4'>
-            <label htmlFor='password' className='text-lg font-medium'>
-              Password
-            </label>
-            <input
-              id='password'
-              className='w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              type='password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <button
-            className={`w-full bg-indigo-600 hover:bg-indigo-500 text-white py-2 rounded ${
-              isSubmitting ? 'disabled:opacity-50 cursor-not-allowed' : ''
-            }`}
-            onClick={handleSignIn}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <div className='flex items-center justify-center'>
-                <div
-                  className='animista-loader'
-                  style={{ borderTopColor: 'transparent' }}
-                ></div>
-              </div>
-            ) : (
-              'Sign In'
-            )}
-          </button>
-          {isSuccess && (
-            <p className='text-green-500 mt-4 text-sm'>
-              Đăng nhập thành công!
-            </p>
-          )}
-          {isError && (
-            <p className='text-red-500 mt-4 text-sm'>
-              Đăng nhập thất bại. Vui lòng thử lại!
-            </p>
-          )}
-          <div className='flex justify-between mt-4'>
-            <label className='flex items-center'>
-              <input className='mr-2' type='checkbox' /> Remember Me
-            </label>
-            <p>Create an account</p>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+    const handleSignIn = async () => {
+        setIsSubmitting(true);
+        try {
+            const response = await axios.post(
+                'http://localhost:5000/api/v1/auth/login',
+                {
+                    email,
+                    password,
+                },
+            );
+            setIsSubmitting(false);
+            setIsSuccess(true);
+            alert('Login Successful');
+            navigate('/Home-SignIn');
+        } catch (error) {
+            console.error('Login failed :', error.message);
+            setIsSubmitting(false);
+            setIsError(true);
+        }
+    };
+    return (
+        <div className="flex h-screen bg-gray-100">
+            <div className="w-1/2 hidden sm:block">
+                <img
+                    className="w-full h-full object-contain object-center"
+                    src={loginImg}
+                    alt="Login Image"
+                />
+            </div>
+            <div className="w-full sm:w-1/2 bg-gray-100 flex flex-col justify-center">
+                <form className="max-w-md w-full mx-auto bg-white p-8 shadow-md rounded">
+                    <h2 className="text-4xl font-bold text-center mb-6">
+                        Sign In
+                    </h2>
+                    <div className="mb-4">
+                        <label htmlFor="email" className="text-lg font-medium">
+                            Email
+                        </label>
+                        <input
+                            id="email"
+                            className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            type="text"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label
+                            htmlFor="password"
+                            className="text-lg font-medium"
+                        >
+                            Password
+                        </label>
+                        <div className="relative">
+                            <input
+                                id="password"
+                                className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                type={showPassword ? 'password' : 'text'} // Sử dụng trạng thái showPassword để quyết định kiểu dữ liệu đầu vào
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                            <div
+                                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                onClick={() => setShowPassword(!showPassword)} // Khi ấn vào biểu tượng mắt, đảo ngược giá trị của showPassword
+                            >
+                                {showPassword ? (
+                                    <span class="fas fa-eye"></span>
+                                ) : (
+                                    <svg xmlns="http://www.w```jsx"></svg>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                    <button
+                        className={`w-full bg-indigo-600 hover:bg-indigo-500 text-white py-2 rounded ${
+                            isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                        }`}
+                        onClick={handleSignIn}
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? (
+                            <div className="flex items-center justify-center">
+                                <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
+                            </div>
+                        ) : (
+                            'Sign In'
+                        )}
+                    </button>
+                    {isSuccess && (
+                        <p className="text-green-500 mt-4 text-sm text-center">
+                            Login Successful.
+                        </p>
+                    )}
+                    {isError && (
+                        <p className="text-red-500 mt-4 text-sm text-center">
+                            Login Failed. Please try again!
+                        </p>
+                    )}
+                    <div className="flex justify-between mt-4">
+                        <label className="flex items-center">
+                            <input
+                                className="mr-2"
+                                type="checkbox"
+                            />
+                            Remember Me
+                        </label>
+                        <div className="ml-auto">
+                            <button
+                                className="text-indigo-500 no-underline"
+                                type="button"
+                                onClick={() => navigate('/signup')}
+                            >
+                                Create an account
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
 }
