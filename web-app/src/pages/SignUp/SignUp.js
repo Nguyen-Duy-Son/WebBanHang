@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { FaUser, FaLock, FaEnvelope } from 'react-icons/fa';
@@ -8,6 +8,7 @@ import Snowfall from 'react-snowfall'; // Import thư viện react-snowfall
 import './SignUp.css';
 
 const SignUpForm = () => {
+    const [signIn,setSignIn] = useState("");
     const formikSignUp = useFormik({
         initialValues: {
             userName: '',
@@ -28,9 +29,11 @@ const SignUpForm = () => {
                     'http://localhost:5000/api/v1/auth/register',
                     values,
                 );
+                setSignIn("Sign Up successfully");
                 console.log('API response:', response.data);
                 // Xử lý logic sau khi nhận được phản hồi từ API
             } catch (error) {
+                setSignIn("Sign Up failed");
                 console.error('API error:', error);
                 // Xử lý lỗi khi gọi API
             }
@@ -149,6 +152,9 @@ const SignUpForm = () => {
                             onChange={formikSignUp.handleChange}
                             required
                         />
+                    </div>
+                    <div>
+                        <p>{signIn}</p>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className='signup-button flex justify-between'>
