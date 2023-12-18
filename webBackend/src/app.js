@@ -7,6 +7,8 @@ const dotenv = require('dotenv');
 const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/error.middleware');
 const ApiError = require('./utils/ApiError');
+const cors = require('cors');
+
 dotenv.config();
 
 const app = express();
@@ -16,6 +18,14 @@ if (config.env !== 'test') {
     app.use(morgan.errorHandler);
 }
 
+// CORS configuration
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+    optionSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 // parse json request body
 app.use(express.json());
 
