@@ -25,7 +25,17 @@ const getProductById = catchAsync(async (req, res, next) => {
 });
 
 const createProduct = catchAsync(async (req, res, next) => {
-    const Product = await productService.createProduct(req.body);
+    if (!req.file) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Image is required');
+    }
+
+    const imageFile = req.file;
+    const imagePath = imageFile.path.replace(/\\/g, '/');
+    const product = {
+        ...req.body,
+        image: imagePath,
+    };
+    const Product = await productService.createProduct(product);
     res.status(httpStatus.CREATED).json({
         code: httpStatus.CREATED,
         message: 'Create Product successfully!',
