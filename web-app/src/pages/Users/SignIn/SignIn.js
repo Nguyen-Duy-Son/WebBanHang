@@ -1,33 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import loginImg from '~/image/xay-dung-website-ban-hang.jpg';
+import React, { useState} from 'react';
+import loginImg from '~/assets/images/xay-dung-website-ban-hang.jpg';
 import { useNavigate } from 'react-router-dom';
-
+import {login} from '~/services/UserService';
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [isError, setIsError] = useState(false);
-    const [showPassword, setShowPassword] = useState(false); 
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     const handleSignIn = async () => {
         setIsSubmitting(true);
         try {
-            const response = await axios.post(
-                'http://localhost:5000/api/v1/auth/login',
-                {
-                    email,
-                    password,
-                },
-            );
+            const data = {
+                email,
+                password,
+            };
+            const dataSignIn = await login(data);
+            console.log(dataSignIn);
             setIsSubmitting(false);
             setIsSuccess(true);
             alert('Login Successful');
             navigate('/Home-SignIn');
         } catch (error) {
-            console.error('Login failed :', error.message);
+            console.error('Login failed:', error.message);
             setIsSubmitting(false);
             setIsError(true);
         }
@@ -112,10 +110,7 @@ export default function Login() {
                     )}
                     <div className="flex justify-between mt-4">
                         <label className="flex items-center">
-                            <input
-                                className="mr-2"
-                                type="checkbox"
-                            />
+                            <input className="mr-2" type="checkbox" />
                             Remember Me
                         </label>
                         <div className="ml-auto">

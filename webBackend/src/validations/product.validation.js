@@ -4,9 +4,9 @@ const {objectId} = require('./custom.validation')
 const createProduct = {
     body: Joi.object().keys({
         name: Joi.string().required(),
-        brandId: Joi.string().custom(objectId),
+        // brandId: Joi.string().custom(objectId),
         cost:Joi.number().required(),
-        image:Joi.string()
+        image:Joi.string().required()
     })
 }
 const getProducts = {
