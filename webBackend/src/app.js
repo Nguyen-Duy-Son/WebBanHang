@@ -8,7 +8,7 @@ const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/error.middleware');
 const ApiError = require('./utils/ApiError');
 const cors = require('cors');
-
+const path = require('path');
 dotenv.config();
 
 const app = express();
@@ -29,6 +29,9 @@ app.use(cors(corsOptions));
 // parse json request body
 app.use(express.json());
 
+// Đường dẫn đến thư mục chứa ảnh
+const imagePath = path.join(__dirname, '../uploads/images');
+app.use('/uploads/images', express.static(imagePath));
 // parse urlencoded request body
 app.use(express.urlencoded({ extended: true }));
 
@@ -42,6 +45,8 @@ app.use('/api/v1', routes);
 app.use((req, res, next) => {
     next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
 });
+
+
 
 // convert error to ApiError, if needed
 app.use(errorConverter);

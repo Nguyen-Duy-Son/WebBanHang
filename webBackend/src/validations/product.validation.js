@@ -4,7 +4,7 @@ const {objectId} = require('./custom.validation')
 const createProduct = {
     body: Joi.object().keys({
         name: Joi.string().required(),
-        // brandId: Joi.string().custom(objectId),
+        nameBrand: Joi.string().required(),
         cost:Joi.number().required(),
         image:Joi.string().required()
     })
@@ -29,7 +29,7 @@ const updateProduct = {
     body: Joi.object()
         .keys({
             name: Joi.string(),
-            brandId: Joi.string().custom(objectId),
+            nameBrand: Joi.string().required(),
             cost:Joi.number(),
             image:Joi.string()
         })

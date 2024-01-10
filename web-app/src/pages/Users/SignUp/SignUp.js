@@ -4,7 +4,7 @@ import { FaUser, FaLock, FaEnvelope } from 'react-icons/fa';
 import imgcontent from '~/assets/images/img-content.jpg';
 import Snowfall from 'react-snowfall';
 import './SignUp.css';
-import {register} from '~/services/UserService';
+import {register} from '~/services/auth.service';
 
 const SignUpForm = () => {
   const [userName, setUserName] = useState('');
@@ -41,7 +41,6 @@ const SignUpForm = () => {
         confirmPassword,
       };
 
-      // Call login method from UserService
       const response = await register(data);
       console.log(response);
       navigate('/SignIn');

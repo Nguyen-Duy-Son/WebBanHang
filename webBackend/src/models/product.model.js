@@ -9,15 +9,14 @@ const productSchema = new Schema ({
         trim: true,
         unique: true
     },
-    brandId:{
-        type:Schema.Types.ObjectId,
-        default:null
+    nameBrand:{
+        type:String,
+        required:[true,"Please provide your nameBrand!"],
+        trim: true,
     },
     cost:{
         type:Number,
         required:[true,"Please provide your costProduct!"],
-        unique: true,
-
     },
     image:{
         type: String,
