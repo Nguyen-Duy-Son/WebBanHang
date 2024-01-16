@@ -1,35 +1,39 @@
-import React, { useState} from 'react';
+import React, { useState,useContext} from 'react';
 import loginImg from '~/assets/images/xay-dung-website-ban-hang.jpg';
 import { useNavigate } from 'react-router-dom';
 import {login} from '~/services/auth.service';
+import { getUserByEmail } from '~/services/user.service';
+import  UserContext from '../UserContext/UserContext'
 export default function Login() {
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
-    const [isError, setIsError] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
-    const navigate = useNavigate();
+  const [password, setPassword] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const { updateUser } = useContext(UserContext);
 
-    const handleSignIn = async () => {
-        setIsSubmitting(true);
-        try {
-            const data = {
-                email,
-                password,
-            };
-            const dataSignIn = await login(data);
-            console.log(dataSignIn);
-            setIsSubmitting(false);
-            setIsSuccess(true);
-            alert('Login Successful');
-            navigate('/Home-SignIn');
-        } catch (error) {
-            console.error('Login failed:', error.message);
-            setIsSubmitting(false);
-            setIsError(true);
-        }
-    };
+  const handleSignIn = async () => {
+    setIsSubmitting(true);
+    try {
+      const data = {
+        email,
+        password,
+      };
+      const dataSignIn = await login(data);
+      const accessToken = dataSignIn.data.access;
+      setIsSubmitting(false);
+      const response = await getUserByEmail(email);
+      const user = response.data;
+      alert('Login Successful');
+      updateUser(user); // Cập nhật thông tin người dùng trong context
+      navigate('/', { state: { user } });
+    } catch (error) {
+      console.error('Login failed:', error.message);
+      setIsSubmitting(false);
+      setIsError(true);
+    }
+  };
     return (
         <div className="flex h-screen bg-gray-100">
             <div className="w-1/2 hidden sm:block">
@@ -73,13 +77,9 @@ export default function Login() {
                             />
                             <div
                                 className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-                                onClick={() => setShowPassword(!showPassword)} // Khi ấn vào biểu tượng mắt, đảo ngược giá trị của showPassword
+                                onClick={() => setShowPassword(!showPassword)}
                             >
-                                {showPassword ? (
-                                    <span class="fas fa-eye"></span>
-                                ) : (
-                                    <svg xmlns="http://www.w```jsx"></svg>
-                                )}
+                                <span class="fas fa-eye"></span>
                             </div>
                         </div>
                     </div>
@@ -98,11 +98,6 @@ export default function Login() {
                             'Sign In'
                         )}
                     </button>
-                    {isSuccess && (
-                        <p className="text-green-500 mt-4 text-sm text-center">
-                            Login Successful.
-                        </p>
-                    )}
                     {isError && (
                         <p className="text-red-500 mt-4 text-sm text-center">
                             Login Failed. Please try again!
@@ -117,7 +112,7 @@ export default function Login() {
                             <button
                                 className="text-indigo-500 no-underline"
                                 type="button"
-                                onClick={() => navigate('/signup')}
+                                onClick={() => navigate('/SignUp')}
                             >
                                 Create an account
                             </button>

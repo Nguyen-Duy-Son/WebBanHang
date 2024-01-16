@@ -55,11 +55,20 @@ const deleteUser = catchAsync(async (req, res, next) => {
         data: user,
     });
 });
-
+const getUserByEmail = catchAsync(async (req, res, next) => {
+    const email = req.query.email;
+    const user = await userService.getUserByEmail(email);
+    res.status(httpStatus.OK).json({
+        code: httpStatus.OK,
+        message: 'Get user by email successfully!',
+        data: user,
+    });
+});
 module.exports = {
     getUsers,
     getUser,
     createUser,
     updateUser,
     deleteUser,
+    getUserByEmail
 };

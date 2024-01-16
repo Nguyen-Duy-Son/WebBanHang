@@ -6,7 +6,6 @@ export const register = async (data) => {
             'http://localhost:5000/api/v1/auth/register',
             data,
         );
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -19,7 +18,6 @@ export const login = async (data) => {
             'http://localhost:5000/api/v1/auth/login',
             data,
         );
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.log(error);

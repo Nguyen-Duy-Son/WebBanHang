@@ -12,6 +12,10 @@ userRouter
     .route('/')
     .get(validate(userValidation.getUsers), userController.getUsers)
     .post(validate(userValidation.createUser), userController.createUser);
+   
+userRouter
+    .route('/email')
+    .get(validate(userValidation.getUserByEmail), userController.getUserByEmail)
 
 userRouter
     .route('/:userId')

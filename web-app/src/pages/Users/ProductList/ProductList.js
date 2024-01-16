@@ -4,7 +4,7 @@ import ProductItem from './Product';
 import './ProductList.css';
 import { useNavigate } from 'react-router-dom';
 
-const ProductList = () => {
+const ProductList = ({user}) => {
     const [products, setProducts] = useState([]);
     const navigate = useNavigate();
     useEffect(() => {

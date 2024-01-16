@@ -49,11 +49,19 @@ const deleteUserById = async (userId) => {
     }
     return deletedUser;
 };
-
+const getUserByEmail = async (emailQuery) => {
+    const user = await User.findOne({email:emailQuery});
+    console.log(user);
+    if (!user) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'User not found!');
+    }
+    return user;
+};
 module.exports = {
     getUsers,
     getUserById,
     createUser,
     updateUserById,
     deleteUserById,
+    getUserByEmail
 };

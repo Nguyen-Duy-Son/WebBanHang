@@ -19,6 +19,11 @@ const getUsers = {
         page: Joi.number().integer(),
     }),
 };
+const getUserByEmail = {
+    query: Joi.object().keys({
+        email: Joi.string().email().required(),
+    }),
+};
 
 const getUser = {
     params: Joi.object().keys({
@@ -32,7 +37,6 @@ const updateUser = {
     }),
     body: Joi.object()
         .keys({
-            email: Joi.string().email(),
             password: Joi.string().custom(password),
             phone:Joi.string(),
             userName: Joi.string(),
@@ -55,4 +59,5 @@ module.exports = {
     getUser,
     updateUser,
     deleteUser,
+    getUserByEmail
 };
