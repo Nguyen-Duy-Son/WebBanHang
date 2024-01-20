@@ -40,7 +40,6 @@ const Header = () => {
                             <span className="user-name">{user.userName}</span>
                         </div>
                     ) : (
-                        // If props is null, display login/signup links
                         <div className="login-signup">
                             <a className="login-signup-click" href="/SignUp">
                                 Đăng Kí
@@ -54,12 +53,12 @@ const Header = () => {
                         <div className="flex items-center h-full">
                             <i className="fas fa-cart-shopping h-8 w-8 flex items-center"></i>
                         </div>
-                        <a
-                            href="/cart"
+                        <Link
+                            to="/cart"
                             className="flex items-center mr-4 h-full w-full"
                         >
                             <b>Giỏ hàng</b>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>

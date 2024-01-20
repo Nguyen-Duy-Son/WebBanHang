@@ -25,7 +25,7 @@ const defaultRoutes = [
         route: brandRoute,
     },
     {
-        path: 'baskets',
+        path: '/baskets',
         route: basketRoute
     }
 ];

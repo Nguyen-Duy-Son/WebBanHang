@@ -12,7 +12,7 @@ const basketSchema = new Schema(
                 },
                 numberOfProduct:{
                     type:Number,
-                    default:0
+                    default:1
                 }
             }
         ],

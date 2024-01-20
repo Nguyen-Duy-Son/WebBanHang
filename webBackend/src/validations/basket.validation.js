@@ -7,7 +7,8 @@ const createBasket = {
         purchasedProducts:Joi.array().items({
             productId:Joi.string().custom(objectId),
             numberOfProduct:Joi.number().integer()
-        })
+        }),
+        totalCost:Joi.number()
     })
 }
 const getBaskets = {
@@ -30,7 +31,7 @@ const updateBasket = {
     }),
     body: Joi.object()
         .keys({
-            userId: Joi.string().required(),
+            userId: Joi.required().custom(objectId),
             purchasedProducts:Joi.array().items({
                 productId:Joi.string().custom(objectId),
                 numberOfProduct:Joi.number().integer()
@@ -43,10 +44,17 @@ const deleteBasket = {
         userId: Joi.string().custom(objectId),
     }),
 };
+const addProductToBasketOfUser ={
+    body: Joi.object().keys({
+        productId:Joi.required().custom(objectId),
+        userId: Joi.required().custom(objectId),
+    })
+}
 module.exports = {
     createBasket,
     getBasket,
     getBaskets,
     updateBasket,
-    deleteBasket
+    deleteBasket,
+    addProductToBasketOfUser
 }
