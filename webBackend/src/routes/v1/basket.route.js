@@ -13,8 +13,8 @@ basketRouter
     .get(validate(basketValidation.getBaskets), basketController.getBaskets)
     .post(validate(basketValidation.createBasket), basketController.createBasket);
 basketRouter
-    .route('/add-product')
-    .post(validate(basketValidation.addProductToBasketOfUser), basketController.addProductToBasket);
+    .route('/product')
+    .post(validate(basketValidation.addOrDeleteProductToBasketOfUser), basketController.addOrDeleteProductToBasket);
 basketRouter
     .route('/:basketId')
     .get(roles("user"),validate(basketValidation.getBasket), basketController.getBasket)

@@ -54,21 +54,31 @@ const deleteBasket = catchAsync(async (req, res, next) => {
         data: basket,
     });
 });
-const addProductToBasket= catchAsync(async(req,res)=>{
-    const {productId, userId} = req.body;
-    const basketOfUser = await basketService.addProductToBasket(productId,userId);
-    res.status(httpStatus.OK).json({
-        code: httpStatus.OK,
-        message: 'Add product to basket successfully!',
-        data: basketOfUser,
-    });
-})
+const addOrDeleteProductToBasket= catchAsync(async(req,res)=>{
+    const {productId, userId,status} = req.body;
+    const basketOfUser = await basketService.addProductToBasket(productId,userId,status);
+    if(status==="add"){
+        res.status(httpStatus.OK).json({
+            code: httpStatus.OK,
+            message: 'Add product to basket successfully!',
+            data: basketOfUser,
+        });
+    }
+    else{
+        res.status(httpStatus.OK).json({
+            code: httpStatus.OK,
+            message: 'delete product to basket successfully!',
+            data: basketOfUser,
+        });
+    }
+    
+});
 module.exports = {
     getBaskets,
     getBasket,
     createBasket,
     updateBasket,
     deleteBasket,
-    addProductToBasket
+    addOrDeleteProductToBasket,
 };
 

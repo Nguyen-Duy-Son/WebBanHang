@@ -44,17 +44,19 @@ const deleteBasket = {
         userId: Joi.string().custom(objectId),
     }),
 };
-const addProductToBasketOfUser ={
+const addOrDeleteProductToBasketOfUser ={
     body: Joi.object().keys({
         productId:Joi.required().custom(objectId),
         userId: Joi.required().custom(objectId),
+        status:Joi.string().required(),
     })
 }
+
 module.exports = {
     createBasket,
     getBasket,
     getBaskets,
     updateBasket,
     deleteBasket,
-    addProductToBasketOfUser
+    addOrDeleteProductToBasketOfUser
 }

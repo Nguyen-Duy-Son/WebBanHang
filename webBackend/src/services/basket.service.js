@@ -17,7 +17,7 @@ const getBaskets = async (filter, options) => {
 };
 
 const createBasket = async (basketBody) => {
-    console.log("aloo");
+  console.log("aloo");
   const rawBasket = await Basket.findOne({ userId: basketBody.userId });
   if (rawBasket)
     throw new ApiError(httpStatus.NOT_FOUND, "Basket already exists");
@@ -41,56 +41,49 @@ const deleteBasketById = async (backetId) => {
   }
   return basket;
 };
-const addProductToBasket = async (productId, userId) => {
+const addProductToBasket = async (productId, userId, status) => {
   const basketOfUser = await Basket.findOne({ userId: userId });
   if (!basketOfUser) {
-    throw new ApiError(httpStatus.NOT_FOUND, "basket not found to add Product");
+    throw new ApiError(httpStatus.NOT_FOUND, "basket not found");
   }
+  if (status == "add") {
+    const existingProduct = basketOfUser.purchasedProducts.find(
+      (product) => product.productId.toString() === productId,
+    );
 
-  // Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng
-  const existingProduct = basketOfUser.purchasedProducts.find(
-    (product) => product.productId.toString() === productId,
-  );
-
-  if (existingProduct) {
-    // Nếu sản phẩm đã tồn tại, tăng numberOfProduct lên 1
-    existingProduct.numberOfProduct += 1;
-  } else {
-    // Nếu sản phẩm chưa tồn tại, thêm sản phẩm mới vào giỏ hàng với numberOfProduct là 1
-    basketOfUser.purchasedProducts.push({
-      productId: productId,
-      numberOfProduct: 1,
-    });
-  }
-
-  // Lưu giỏ hàng đã cập nhật
-  await basketOfUser.save();
-  return basketOfUser;
-};
-const deleteProductToBasket = async (productId, userId) => {
-  const basketOfUser = await Basket.findOne({ userId: userId });
-  if (!basketOfUser) {
-    throw new ApiError(httpStatus.NOT_FOUND, "basket not found to delete Product");
-  }
-
-  // Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng
-  const existingProductIndex = basketOfUser.purchasedProducts.findIndex(
-    (product) => product.productId.toString() === productId
-  );
-
-  if (existingProductIndex !== -1) {
-    // Nếu sản phẩm đã tồn tại, giảm numberOfProduct đi 1
-    const existingProduct = basketOfUser.purchasedProducts[existingProductIndex];
-    if (existingProduct.numberOfProduct >= 1) {
-      existingProduct.numberOfProduct -= 1;
+    if (existingProduct) {
+      // Nếu sản phẩm đã tồn tại, tăng numberOfProduct lên 1
+      existingProduct.numberOfProduct += 1;
     } else {
-      // Nếu numberOfProduct là 1, xoá sản phẩm khỏi mảng purchasedProducts
-      basketOfUser.purchasedProducts.splice(existingProductIndex, 1);
+      // Nếu sản phẩm chưa tồn tại, thêm sản phẩm mới vào giỏ hàng với numberOfProduct là 1
+      basketOfUser.purchasedProducts.push({
+        productId: productId,
+        numberOfProduct: 1,
+      });
     }
-  } else {
-    throw new ApiError(httpStatus.NOT_FOUND, "product not found in the basket");
-  }
+  } else if (status == "delete") {
+    // Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng
+    const existingProductIndex = basketOfUser.purchasedProducts.findIndex(
+      (product) => product.productId.toString() === productId,
+    );
 
+    if (existingProductIndex !== -1) {
+      // Nếu sản phẩm đã tồn tại, giảm numberOfProduct đi 1
+      const existingProduct =
+        basketOfUser.purchasedProducts[existingProductIndex];
+      if (existingProduct.numberOfProduct >= 1) {
+        existingProduct.numberOfProduct -= 1;
+      } else {
+        // Nếu numberOfProduct là 1, xoá sản phẩm khỏi mảng purchasedProducts
+        basketOfUser.purchasedProducts.splice(existingProductIndex, 1);
+      }
+    } else {
+      throw new ApiError(
+        httpStatus.NOT_FOUND,
+        "product not found in the basket",
+      );
+    }
+  }
   // Lưu giỏ hàng đã cập nhật
   await basketOfUser.save();
   return basketOfUser;
@@ -101,5 +94,5 @@ module.exports = {
   createBasket,
   updateBasketById,
   deleteBasketById,
-  addProductToBasket
+  addProductToBasket,
 };
