@@ -22,12 +22,13 @@ export default function Login() {
       };
       const dataSignIn = await login(data);
       const accessToken = dataSignIn.data.access;
+       console.log("access",accessToken);
       setIsSubmitting(false);
       const response = await getUserByEmail(email);
       const user = response.data;
       alert('Login Successful');
-      updateUser(user); // Cập nhật thông tin người dùng trong context
-      navigate('/', { state: { user } });
+      updateUser(user,accessToken); // Cập nhật thông tin người dùng trong context
+      navigate('/');
     } catch (error) {
       console.error('Login failed:', error.message);
       setIsSubmitting(false);

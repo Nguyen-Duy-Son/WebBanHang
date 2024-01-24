@@ -16,8 +16,10 @@ basketRouter
     .route('/product')
     .post(validate(basketValidation.addOrDeleteProductToBasketOfUser), basketController.addOrDeleteProductToBasket);
 basketRouter
+    .route('/:userId')
+    .get(roles(["user","admin"]),validate(basketValidation.getBasketByUserId), basketController.getBasketByUserId)
+basketRouter
     .route('/:basketId')
-    .get(roles("user"),validate(basketValidation.getBasket), basketController.getBasket)
     .put(roles("user"),validate(basketValidation.updateBasket), basketController.updateBasket)
     .delete(roles("user"),validate(basketValidation.deleteBasket), basketController.deleteBasket);
 

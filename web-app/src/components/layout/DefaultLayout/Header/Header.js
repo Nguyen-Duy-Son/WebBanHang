@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import './Header.css';
 
 const Header = () => {
-    const { user } = useContext(UserContext);
+    const { user,token } = useContext(UserContext);
     const itemMenu = [
         'Trang Chủ',
         'Sản Phẩm',
@@ -14,7 +14,6 @@ const Header = () => {
         'Tin Tức',
         'Liên Hệ',
     ];
-
     return (
         <header className="header bg-white-800 h-full w-full">
             <div className="container mx-auto px-4 py-2 flex items-center justify-between w-full h-full">
@@ -49,17 +48,31 @@ const Header = () => {
                             </a>
                         </div>
                     )}
-                    <div className="flex items-center justify-between bg-slate-400 w-full h-17 p-2 rounded">
-                        <div className="flex items-center h-full">
-                            <i className="fas fa-cart-shopping h-8 w-8 flex items-center"></i>
+                    {user ? (
+                        <div className="flex items-center justify-between bg-slate-400 w-full h-17 p-2 rounded">
+                            <div className="flex items-center h-full">
+                                <i className="fas fa-cart-shopping h-8 w-8 flex items-center"></i>
+                            </div>
+                            <Link
+                                to={`/cart/${user.id}`}
+                                className="flex items-center mr-4 h-full w-full"
+                            >
+                                <b>Giỏ hàng</b>
+                            </Link>
                         </div>
-                        <Link
-                            to="/cart"
-                            className="flex items-center mr-4 h-full w-full"
-                        >
-                            <b>Giỏ hàng</b>
-                        </Link>
-                    </div>
+                    ) : (
+                        <div className="flex items-center justify-between bg-slate-400 w-full h-17 p-2 rounded">
+                            <div className="flex items-center h-full">
+                                <i className="fas fa-cart-shopping h-8 w-8 flex items-center"></i>
+                            </div>
+                            <Link
+                                to={`/cart/`}
+                                className="flex items-center mr-4 h-full w-full"
+                            >
+                                <b>Giỏ hàng</b>
+                            </Link>
+                        </div>
+                    )}
                 </div>
             </div>
             <hr></hr>

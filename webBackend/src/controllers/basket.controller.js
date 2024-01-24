@@ -14,12 +14,12 @@ const getBaskets = catchAsync(async(req,res,next)=>{
         data: baskets,
     });
 })
-const getBasket = catchAsync(async (req, res, next) => {
-    const basketId = req.params.basketId || req.basket.id;
-    const basket = await basketService.getBasket(basketId);
+const getBasketByUserId = catchAsync(async (req, res, next) => {
+    const {userId} = req.params;
+    const basket = await basketService.getBasketByUserId(userId);
     res.status(httpStatus.OK).json({
         code: httpStatus.OK,
-        message: 'Get basket by id successfully!',
+        message: 'Get basket by UserId successfully!',
         data: basket,
     });
 });
@@ -75,7 +75,7 @@ const addOrDeleteProductToBasket= catchAsync(async(req,res)=>{
 });
 module.exports = {
     getBaskets,
-    getBasket,
+    getBasketByUserId,
     createBasket,
     updateBasket,
     deleteBasket,

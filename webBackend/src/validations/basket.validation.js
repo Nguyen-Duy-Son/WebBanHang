@@ -20,9 +20,9 @@ const getBaskets = {
         page: Joi.number().integer(),
     })
 }
-const getBasket = {
+const getBasketByUserId = {
     params: Joi.object().keys({
-        basketId: Joi.string().custom(objectId),
+        userId: Joi.string().custom(objectId).required(),
     }),
 };
 const updateBasket = {
@@ -54,7 +54,7 @@ const addOrDeleteProductToBasketOfUser ={
 
 module.exports = {
     createBasket,
-    getBasket,
+    getBasketByUserId,
     getBaskets,
     updateBasket,
     deleteBasket,

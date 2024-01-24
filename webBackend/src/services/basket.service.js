@@ -2,8 +2,8 @@ const Basket = require("../models/basket.model");
 const httpStatus = require("http-status");
 const ApiError = require("../utils/ApiError");
 
-const getBasket = async (basketId) => {
-  const basket = await Basket.findById(basketId);
+const getBasketByUserId = async (userId) => {
+  const basket = await Basket.findOne({userId:userId});
   if (!basket) throw new ApiError(httpStatus.NOT_FOUND, "basket not found");
   return basket;
 };
@@ -89,7 +89,7 @@ const addProductToBasket = async (productId, userId, status) => {
   return basketOfUser;
 };
 module.exports = {
-  getBasket,
+  getBasketByUserId,
   getBaskets,
   createBasket,
   updateBasketById,
