@@ -42,6 +42,7 @@ const SignUpForm = () => {
       };
 
       const response = await register(data);
+      
       console.log(response);
       navigate('/SignIn');
     } catch (error) {
